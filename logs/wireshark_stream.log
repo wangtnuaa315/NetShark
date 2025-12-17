@@ -1,0 +1,62 @@
+POST /vss/httpjson/user_login HTTP/1.1
+Host: 192.168.2.33:8000
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Content-MD5: soaOtqh9rBahgWFUeoAmWA==
+x-ca-key: 11Scmh0a
+x-ca-nonce: 25c4c3d49c45423f8f5934f47490c5ac
+x-ca-timestamp: 1765355438534
+x-ca-signature-headers: x-ca-key,x-ca-nonce,x-ca-timestamp
+x-ca-signature: hlW7ccntDD0iCODYiqerZ6E3gnahTNWHyEMxDVK36n8=
+Content-Length: 156
+Connection: Keep-Alive
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,en,*
+User-Agent: Mozilla/5.0
+
+{
+    "nClientType": 1,
+    "strIP": "192.168.2.33",
+    "strLoginName": "admin",
+    "strMAC": "",
+    "strPassword": "e10adc3949ba59abbe56e057f20f883e"
+}
+
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=UTF-8
+Connection: keep-alive
+Content-Length: 316
+
+{"nResultCode":1010100005,"strResultDescribe":"login failed","strDomainCode":"","strUserID":"","strUserName":"","nPriority":0,"nRoleID":0,"nRoleType":0,"strSieIP":"","nSiePort":0,"nSieHttpPort":0,"strToken":"","nState":0,"nSieTlsPort":0,"nSieHttpsPort":0,"nPasswndRemain":0,"nLockRemain":0,"nSysTime":0,"nInitPwd":0}
+POST /vss/httpjson/user_login HTTP/1.1
+Host: 192.168.2.33:8000
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Content-MD5: xmEuArHozGlwRCSP00oP6A==
+x-ca-key: 11Scmh0a
+x-ca-nonce: 4afc428652b043da82f7700d998de7f8
+x-ca-timestamp: 1765355438641
+x-ca-signature-headers: x-ca-key,x-ca-nonce,x-ca-timestamp
+x-ca-signature: +j8h5dvwlxFUv2oa8Q7hxuSo1NtHflDY/ALK+ZbxCv0=
+Content-Length: 188
+Connection: Keep-Alive
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,en,*
+User-Agent: Mozilla/5.0
+
+{
+    "nClientType": 1,
+    "strIP": "192.168.2.33",
+    "strLoginName": "admin",
+    "strMAC": "",
+    "strPassword": "f93c6f567e002d965b6944835265f04e5f3974c5aef80610d33ffb58a8164820"
+}
+
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=UTF-8
+Connection: keep-alive
+Content-Length: 419
+
+{"nResultCode":0,"strResultDescribe":"OK","strDomainCode":"001e67a71719","strUserID":"1","strUserName":"管理员","nPriority":0,"nRoleID":1,"nRoleType":1,"strSieIP":"192.168.2.33","nSiePort":9001,"nSieHttpPort":9200,"strToken":"edc5a55e84306b65dc53d25333384cef61c5251c19b95cfec18d40a9903d84c9","nState":0,"nSieTlsPort":9003,"nSieHttpsPort":1443,"nPasswndRemain":0,"nLockRemain":0,"nSysTime":1765354721447,"nInitPwd":1}
