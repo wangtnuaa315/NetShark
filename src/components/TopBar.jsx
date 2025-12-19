@@ -1,7 +1,26 @@
-import React, { useMemo } from 'react';
-import { Box, Server, Play, Pause, Trash2, Search, Power, Activity } from 'lucide-react';
+import React, { useMemo, useState, useCallback } from 'react';
+import { Box, Server, Play, Pause, Trash2, Search, Power, Activity, X } from 'lucide-react';
 
 export default function TopBar({ config, isCapturing, onToggle, onClear, onDisconnect, filterText, setFilterText, packets = [] }) {
+    // 本地搜索输入状态（避免每次按键都触发搜索）
+    const [localFilter, setLocalFilter] = useState(filterText);
+
+    // 处理回车搜索
+    const handleKeyDown = useCallback((e) => {
+        if (e.key === 'Enter') {
+            setFilterText(localFilter);
+        }
+        if (e.key === 'Escape') {
+            setLocalFilter('');
+            setFilterText('');
+        }
+    }, [localFilter, setFilterText]);
+
+    // 清除搜索
+    const handleClearSearch = useCallback(() => {
+        setLocalFilter('');
+        setFilterText('');
+    }, [setFilterText]);
     // 计算网络质量
     const networkQuality = useMemo(() => {
         const tcpPackets = packets.filter(p => p.tcp);
@@ -130,15 +149,38 @@ export default function TopBar({ config, isCapturing, onToggle, onClear, onDisco
             </div>
 
             <div className="flex items-center gap-3">
-                <div className="relative">
+                <div className="relative group">
                     <Search size={14} className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500" />
                     <input
                         type="text"
-                        placeholder="过滤数据包..."
-                        value={filterText}
-                        onChange={(e) => setFilterText(e.target.value)}
-                        className="bg-gray-900 border border-gray-600 rounded pl-8 py-1.5 text-xs text-gray-300 w-48 focus:border-blue-500 outline-none"
+                        placeholder="搜索... (回车确认)"
+                        value={localFilter}
+                        onChange={(e) => setLocalFilter(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        className={`bg-gray-900 border rounded pl-8 pr-8 py-1.5 text-xs text-gray-300 w-56 focus:border-blue-500 outline-none transition-colors ${filterText ? 'border-blue-500 bg-blue-900/20' : 'border-gray-600'
+                            }`}
                     />
+                    {/* 清除按钮 */}
+                    {localFilter && (
+                        <button
+                            onClick={handleClearSearch}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                        >
+                            <X size={14} />
+                        </button>
+                    )}
+                    {/* 提示信息 */}
+                    {localFilter && localFilter !== filterText && (
+                        <div className="absolute top-full left-0 mt-1 text-[10px] text-yellow-400 bg-gray-800 px-2 py-1 rounded border border-gray-700 whitespace-nowrap">
+                            按 Enter 搜索 | Esc 清除
+                        </div>
+                    )}
+                    {/* 当前过滤状态 */}
+                    {filterText && (
+                        <div className="absolute top-full right-0 mt-1 text-[10px] text-blue-400 bg-blue-900/30 px-2 py-1 rounded border border-blue-600/30 whitespace-nowrap">
+                            已过滤: {filterText}
+                        </div>
+                    )}
                 </div>
                 <button
                     onClick={onDisconnect}

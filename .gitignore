@@ -1,1 +1,26 @@
-node_modules
+# 依赖
+node_modules/
+venv/
+__pycache__/
+
+# 临时/废弃文件
+_deprecated/
+*.pyc
+*.log
+
+# 构建输出
+dist/
+
+# 本地缓存
+local_npm_cache/
+.npm/
+
+# IDE
+.vscode/
+.idea/
+
+# 日志
+logs/
+
+# 敏感数据
+backend/data/ssh_servers.json

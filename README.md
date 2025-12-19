@@ -1,186 +1,126 @@
-# NetShark 网络流量分析工具
+# NetShark - 网络流量分析工具
 
-> 一个为内部使用设计的 Windows 网络数据包捕获与分析工具
+<p align="center">
+  <img src="docs/logo.png" alt="NetShark Logo" width="120">
+</p>
 
----
+一款现代化的网络流量分析工具，支持本地抓包和 SSH 远程抓包，提供直观的可视化界面。
+
+## ✨ 主要功能
+
+- 🔍 **本地抓包** - 基于 Scapy 的实时网络流量捕获
+- 🌐 **SSH 远程抓包** - 通过 SSH 连接远程服务器执行 tcpdump
+- 🔐 **HTTPS 解密** - 可选的 MITM 代理模式，解密 HTTPS 流量
+- 📊 **TCP 分析** - 重传检测、乱序检测、流追踪
+- 📁 **PCAP 导入** - 支持导入现有 PCAP 文件进行分析
 
 ## 🚀 快速开始
 
-### ⚡ 一键启动（真正的现代化方案）
+### 前置要求
 
-**以管理员身份**打开终端（PowerShell/CMD），然后执行：
+- **Windows 10/11**
+- **Python 3.10+**
+- **Npcap** (用于本地抓包)
 
-```bash
-cd D:\PythonProject\NetShark
-npm start
-```
+### 安装步骤
 
-**就这一条命令！** ✨
-
-**特点**: 
-- ✅ **单窗口，彩色合并日志**（蓝色=后端，紫色=前端）
-- ✅ **业界标准工具** (concurrently - npm 生态标准)
-- ✅ **Ctrl+C 一键停止所有服务**
-- ✅ **跨平台兼容** (Windows/Mac/Linux)
-- ✅ **零配置，开箱即用**
-
-访问: **http://localhost:5173/**
-
----
-
-### 📝 首次使用
-
-1. **安装 Npcap 驱动**（仅首次）:
-   ```
-   双击: dependencies\npcap-1.85.exe
-   ```
-
-2. **安装依赖**（仅首次）:
+1. **克隆仓库**
    ```bash
-   npm install
+   git clone https://github.com/wangtnuaa315/NetShark.git
+   cd NetShark
    ```
 
-3. **启动**:
+2. **运行安装脚本**
    ```bash
-   npm start
+   # 双击运行或在命令行执行
+   install.bat
+   ```
+   
+   安装脚本会自动：
+   - 检测 Python 环境
+   - 检测/提示安装 Npcap
+   - 创建虚拟环境
+   - 安装依赖包
+
+3. **启动应用**
+   ```bash
+   # 双击运行
+   start.bat
    ```
 
----
+4. **访问应用**
+   
+   打开浏览器访问: http://localhost:8000
 
-## 📦 系统要求
+### 手动安装 Npcap
 
-### 必需
-- Windows 10/11 (x64)
-- 管理员权限（用于安装驱动）
-- 8GB+ 内存
+如果安装脚本未自动安装 Npcap，请手动下载安装：
 
-### 软件依赖（开发环境）
-- Node.js 18+
-- Python 3.9+
-- Npcap 1.79+ (自动安装)
-
----
+1. 访问 https://npcap.com/#download
+2. 下载并运行安装程序
+3. **重要**: 安装时勾选 "WinPcap API-compatible Mode"
 
 ## 📁 项目结构
 
 ```
 NetShark/
-├── backend/               # Python 后端 (FastAPI)
-│   ├── main.py           # API 入口
-│   └── services/         # 核心服务
-│       ├── process_scanner.py   # 进程扫描
-│       └── packet_capture.py    # 网络抓包 (待实现)
-├── src/                  # React 前端
-│   ├── components/       # UI 组件
-│   ├── services/         # 业务逻辑
-│   └── models/           # 数据模型
-├── dependencies/         # 第三方依赖
-│   └── npcap-1.79.exe   # Npcap 安装包 (需手动下载)
-└── scripts/              # 工具脚本
-    ├── install-npcap.bat      # 自动安装驱动
-    └── start-dev.bat          # 启动开发环境
+├── backend/                 # Python 后端
+│   ├── main.py             # FastAPI 主入口
+│   ├── services/           # 服务模块
+│   │   ├── packet_capture.py   # 抓包服务
+│   │   ├── tcp_stream.py       # TCP 流分析
+│   │   ├── ssh_manager.py      # SSH 管理
+│   │   └── mitm_proxy.py       # HTTPS 代理
+│   └── data/               # 数据存储
+├── src/                    # React 前端源码
+│   ├── components/         # UI 组件
+│   └── services/           # 前端服务
+├── dist/                   # 前端编译输出
+├── tools/                  # 工具和安装包
+├── install.bat             # 安装脚本
+├── start.bat               # 启动脚本
+└── requirements.txt        # Python 依赖
 ```
 
----
+## 🛠️ 开发模式
 
-## 🔧 功能模块
-
-### ✅ 已实现
-- [x] 进程列表扫描（真实数据）
-- [x] 应用选择与启动
-- [x] 远程 Agent Ping 测试
-- [x] 中文界面
-- [x] 现代化 UI（TailwindCSS 深色主题）
-
-### 🚧 开发中
-- [ ] 真实网络流量捕获（Scapy + Npcap）
-- [ ] WebSocket 实时推送
-- [ ] HTTP/HTTPS 协议解析
-- [ ] 数据包过滤与搜索
-
-### 📋 计划中
-- [ ] PCAP 文件导出
-- [ ] 流量统计分析
-- [ ] 异常检测告警
-- [ ] 多进程并发监控
-
----
-
-## 🛠️ 开发指南
-
-### 安装依赖
+如需进行前端开发：
 
 ```bash
-# 前端依赖
+# 安装 Node.js 依赖
 npm install
 
-# 后端依赖
-pip install -r requirements.txt
-```
-
-### 手动启动（调试用）
-
-```bash
-# 终端 1: 启动后端
-cd backend
-python -m backend.main
-
-# 终端 2: 启动前端
+# 启动开发服务器
 npm run dev
+
+# 构建生产版本
+npm run build
 ```
 
-### 构建生产版本（待实现）
+## 📝 使用说明
 
-```bash
-npm run build          # 前端打包
-pyinstaller spec.py    # 后端打包
-```
+### 本地抓包模式
 
----
+1. 选择要监控的进程
+2. 选择网络接口
+3. 点击"开始抓包"
+4. 查看实时捕获的数据包
 
-## 📝 依赖下载
+### SSH 远程抓包模式
 
-### Npcap 驱动
-
-由于许可证限制，Npcap 安装包需要手动下载：
-
-1. 访问 https://npcap.com/#download
-2. 下载 **Npcap 1.79 installer for Windows**
-3. 将 `npcap-1.79.exe` 放到 `dependencies/` 目录
-4. 运行 `scripts\install-npcap.bat`
-
----
-
-## 🐛 故障排查
-
-### 问题：启动后报 "Npcap not found"
-**解决**: 运行 `scripts\install-npcap.bat` 安装驱动
-
-### 问题：WinError 740 权限不足
-**解决**: 以管理员身份运行终端
-
-### 问题：前端无法连接后端
-**解决**: 检查后端是否在 8000 端口运行，查看终端日志
-
----
+1. 切换到"SSH 抓包"标签
+2. 添加并选择远程服务器
+3. 配置抓包参数（接口、过滤器、数量）
+4. 点击"开始抓包"
+5. 等待抓包完成后查看结果
 
 ## 📄 许可证
 
-内部工具，仅供公司内部使用。
+MIT License
 
----
+## 🙏 致谢
 
-## 👥 维护者
-
-- 开发: [您的团队]
-- 联系: [您的邮箱]
-
----
-
-## 📅 更新日志
-
-### v1.0.0 (2025-12-09)
-- ✨ 初始版本发布
-- ✅ 进程扫描与选择
-- ✅ 基础 UI 框架
-- 🚧 网络抓包功能开发中
+- [Scapy](https://scapy.net/) - 强大的网络数据包处理库
+- [FastAPI](https://fastapi.tiangolo.com/) - 现代 Python Web 框架
+- [React](https://react.dev/) - 用户界面库
+- [Npcap](https://npcap.com/) - Windows 网络抓包驱动

@@ -32,10 +32,13 @@ class CaptureEngine {
     // 停止抓包
     stop() {
         this.isActive = false;
+        this.reconnectAttempts = 0; // 重置重试计数
         if (this.websocket) {
             // 发送停止命令
             try {
-                this.websocket.send(JSON.stringify({ command: 'stop' }));
+                if (this.websocket.readyState === WebSocket.OPEN) {
+                    this.websocket.send(JSON.stringify({ command: 'stop' }));
+                }
             } catch (e) {
                 console.warn("Failed to send stop command:", e);
             }

@@ -1,0 +1,24 @@
+{
+  "servers": [
+    {
+      "id": "d7ddbbfe-12f6-472f-a2b0-2afe2787177d",
+      "name": "视频资源池_29",
+      "host": "192.168.2.29",
+      "port": 22,
+      "username": "root",
+      "created_at": "2025-12-18T18:00:54.499194",
+      "last_used": null,
+      "encrypted_password": "JhAVOhEEQFttY09J"
+    },
+    {
+      "id": "d7a684b2-eb76-4fa5-869e-3c6123f9881b",
+      "name": "巴展_95",
+      "host": "192.168.2.95",
+      "port": 10122,
+      "username": "root",
+      "created_at": "2025-12-19T09:20:57.620382",
+      "last_used": null,
+      "encrypted_password": "BhxGY1pUMlptfQ=="
+    }
+  ]
+}

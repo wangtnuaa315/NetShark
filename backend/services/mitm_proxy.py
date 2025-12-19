@@ -100,35 +100,47 @@ class MitmProxyService:
     def _run_proxy(self):
         """在独立线程中运行 mitmproxy"""
         try:
-            from mitmproxy import options
-            from mitmproxy.tools.dump import DumpMaster
-            from mitmproxy import http
-            
-            # 创建新的事件循环
+            # 创建新的事件循环并设置为当前线程的事件循环
             self._loop = asyncio.new_event_loop()
             asyncio.set_event_loop(self._loop)
             
-            # 配置选项
-            opts = options.Options(
-                listen_host="127.0.0.1",
-                listen_port=self.proxy_port,
-                ssl_insecure=True,  # 忽略服务器证书错误
-            )
+            # 运行代理
+            self._loop.run_until_complete(self._async_run_proxy())
             
-            # 创建 DumpMaster
-            master = DumpMaster(opts)
-            
-            # 添加请求/响应处理器
-            master.addons.add(MitmAddon(self._on_request, self._on_response))
-            
-            logger.info(f"Starting mitmproxy on 127.0.0.1:{self.proxy_port}")
-            
-            # 运行
-            self._loop.run_until_complete(master.run())
-            
+        except ImportError as e:
+            logger.error(f"MITM Proxy import error (mitmproxy not installed?): {e}")
+            self.is_running = False
         except Exception as e:
             logger.error(f"MITM Proxy error: {e}")
+            import traceback
+            traceback.print_exc()
             self.is_running = False
+        finally:
+            if self._loop:
+                self._loop.close()
+    
+    async def _async_run_proxy(self):
+        """异步运行 mitmproxy"""
+        from mitmproxy import options
+        from mitmproxy.tools.dump import DumpMaster
+        
+        # 配置选项
+        opts = options.Options(
+            listen_host="127.0.0.1",
+            listen_port=self.proxy_port,
+            ssl_insecure=True,  # 忽略服务器证书错误
+        )
+        
+        # 创建 DumpMaster
+        self._master = DumpMaster(opts)
+        
+        # 添加请求/响应处理器
+        self._master.addons.add(MitmAddon(self._on_request, self._on_response))
+        
+        logger.info(f"Starting mitmproxy on 127.0.0.1:{self.proxy_port}")
+        
+        # 运行代理
+        await self._master.run()
     
     def _on_request(self, flow):
         """处理 HTTP 请求"""
