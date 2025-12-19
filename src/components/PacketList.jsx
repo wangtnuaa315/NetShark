@@ -6,49 +6,51 @@ export default function PacketList({ packets, selectedId, onSelect, listRef, isW
     // 获取协议类型的颜色
     const getProtocolColor = (method, protocol) => {
         // 优先使用 protocol 字段
-        if (protocol === 'TLS') return 'text-yellow-400';     // TLS - 黄色（类似 Wireshark）
-        if (protocol === 'HTTPS') return 'text-green-400';    // HTTPS - 绿色
-        if (protocol === 'HTTP') return 'text-blue-400';      // HTTP - 蓝色
+        if (protocol === 'HTTP/JSON') return 'text-cyan-400';  // HTTP/JSON - 青色
+        if (protocol === 'TLS') return 'text-yellow-400';      // TLS - 黄色（类似 Wireshark）
+        if (protocol === 'HTTPS') return 'text-green-400';     // HTTPS - 绿色
+        if (protocol === 'HTTP') return 'text-green-300';      // HTTP - 浅绿色
+        if (protocol === 'JSON') return 'text-cyan-300';       // JSON - 浅青色
+        if (protocol === 'TCP') return 'text-purple-400';      // TCP - 紫色
+        if (protocol === 'UDP') return 'text-blue-400';        // UDP - 蓝色
 
         // 回退到 method 检测
-        if (method.includes('GET') || method.includes('POST') || method.includes('PUT') || method.includes('DELETE')) {
-            return 'text-blue-400';  // HTTP
+        if (method && method.includes && (method.includes('GET') || method.includes('POST') || method.includes('PUT') || method.includes('DELETE'))) {
+            return 'text-green-300';  // HTTP
         }
-        if (method.includes('DB') || method.includes('SQL')) return 'text-orange-400';  // 数据库
-        if (method.includes('TCP')) return 'text-purple-400';  // TCP
-        if (method.includes('UDP')) return 'text-cyan-400';    // UDP
-        if (method.includes('TLS')) return 'text-yellow-400';  // TLS
+        if (method && method.includes && (method.includes('DB') || method.includes('SQL'))) return 'text-orange-400';  // 数据库
+        if (method && method.includes && method.includes('TCP')) return 'text-purple-400';  // TCP
+        if (method && method.includes && method.includes('UDP')) return 'text-blue-400';    // UDP
+        if (method && method.includes && method.includes('TLS')) return 'text-yellow-400';  // TLS
         return 'text-gray-400';
     };
 
     // 获取协议类型显示文本
     const getProtocolType = (method, protocol) => {
-        // 优先使用 protocol 字段
-        if (protocol === 'TLS') return 'TLS';
-        if (protocol === 'HTTPS') return 'HTTPS';
-        if (protocol === 'HTTP') return 'HTTP';
+        // 直接返回 protocol，如果存在
+        if (protocol) return protocol;
 
         // 回退到 method 检测
-        if (method.includes('GET') || method.includes('POST') || method.includes('PUT') || method.includes('DELETE')) {
+        if (method && method.includes && (method.includes('GET') || method.includes('POST') || method.includes('PUT') || method.includes('DELETE'))) {
             return 'HTTP';
         }
-        if (method.includes('DB') || method.includes('SQL')) return 'DB';
-        if (method.includes('TCP')) return 'TCP';
-        if (method.includes('UDP')) return 'UDP';
-        if (method.includes('TLS')) return 'TLS';
-        return method;
+        if (method && method.includes && (method.includes('DB') || method.includes('SQL'))) return 'DB';
+        if (method && method.includes && method.includes('TCP')) return 'TCP';
+        if (method && method.includes && method.includes('UDP')) return 'UDP';
+        if (method && method.includes && method.includes('TLS')) return 'TLS';
+        return method || 'Unknown';
     };
 
     return (
         <div className="w-1/2 flex flex-col border-r border-gray-700 transition-all duration-300 bg-gray-900">
-            {/* Table Header */}
+            {/* Table Header - 调整列宽 */}
             <div className="grid grid-cols-12 bg-gray-800/80 backdrop-blur-sm text-gray-400 text-xs font-semibold py-2 px-4 border-b border-gray-700 select-none sticky top-0 z-10">
                 <div className="col-span-2">Time</div>
                 <div className="col-span-2">Source</div>
                 <div className="col-span-1">Protocol</div>
-                <div className="col-span-2">Path</div>
+                <div className="col-span-3">Path</div>
                 <div className="col-span-1">Size</div>
-                <div className="col-span-4">Info</div>
+                <div className="col-span-3">Info</div>
             </div>
 
             {/* Table Body */}
@@ -75,14 +77,16 @@ export default function PacketList({ packets, selectedId, onSelect, listRef, isW
                                 {pkt.timestamp}
                             </div>
                             <div className="col-span-2 flex flex-col truncate pr-2">
-                                <span className={`font-medium text-xs ${pkt.category === PacketType.CLIENT ? 'text-blue-300' : (pkt.category === PacketType.SERVER ? 'text-purple-300' : 'text-yellow-300')}`}>{pkt.source}</span>
+                                <span className={`font-medium text-xs ${pkt.category === PacketType.CLIENT ? 'text-blue-300' : (pkt.category === PacketType.SERVER ? 'text-purple-300' : 'text-gray-300')}`}>
+                                    {pkt.source || pkt.sourceIP || '-'}
+                                </span>
                             </div>
                             <div className={`col-span-1 font-bold ${getProtocolColor(pkt.method, pkt.protocol)}`}>{getProtocolType(pkt.method, pkt.protocol)}</div>
-                            <div className="col-span-2 truncate font-mono text-gray-400" title={pkt.path}>
+                            <div className="col-span-3 truncate font-mono text-gray-400" title={pkt.path}>
                                 {pkt.path}
                             </div>
                             <div className="col-span-1 text-gray-500">{pkt.size}</div>
-                            <div className="col-span-4 text-gray-400 font-mono truncate" title={pkt.info || ''}>
+                            <div className="col-span-3 text-gray-400 font-mono truncate" title={pkt.info || ''}>
                                 {pkt.info || '-'}
                             </div>
                         </div>

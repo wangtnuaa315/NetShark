@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, Monitor, Server, Database } from 'lucide-react';
+import { Settings, Monitor, Server, HardDrive } from 'lucide-react';
 
 export default function Sidebar({ config, activeView, setActiveView, onConfig }) {
     const NavItem = ({ icon, active, label, onClick }) => (
@@ -29,18 +29,6 @@ export default function Sidebar({ config, activeView, setActiveView, onConfig })
                 active={activeView === 'client'}
                 onClick={() => setActiveView('client')}
             />
-            <NavItem
-                icon={<Server />}
-                label="远程服务器"
-                active={activeView === 'server'}
-                onClick={() => setActiveView('server')}
-            />
-            <NavItem
-                icon={<Database />}
-                label="数据库"
-                active={activeView === 'db'}
-                onClick={() => setActiveView('db')}
-            />
 
             <div className="mt-auto flex flex-col gap-4">
                 <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-900 border border-gray-800 text-[10px] font-bold text-green-500 cursor-help" title={`Hooked PID: ${config.targetProcess?.pid}`}>
@@ -50,3 +38,4 @@ export default function Sidebar({ config, activeView, setActiveView, onConfig })
         </div>
     );
 }
+
